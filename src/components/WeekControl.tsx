@@ -29,7 +29,6 @@ const WeekControl: React.FC<Props> = ({ onChangeWeek }) => {
 
     const [week, setWeek] = useState(findMonday(new Date()));
 
-
     const handleWeek = (shift: number) => {
         setWeek(shiftDays(week, shift))
         onChangeWeek(week)
@@ -40,7 +39,7 @@ const WeekControl: React.FC<Props> = ({ onChangeWeek }) => {
             <i className="arrow left fas fa-arrow-left" onClick={() => handleWeek(-7)}></i>
 
             <div>
-                <h1 id="week-text">Semana</h1>
+                <h1 id="week-text">Semana {week.getDate()}/{week.getMonth() + 1}</h1>
             </div>
 
             <i className="arrow right fas fa-arrow-right" onClick={() => handleWeek(7)}></i>
