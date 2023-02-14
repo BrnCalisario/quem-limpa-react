@@ -21,6 +21,18 @@ const shiftDays = (date: Date, shift: number) => {
     return shifted
 }
 
+const getWeek = (date: Date) => {
+    const initialDate = date
+    const weekDates = []
+
+    for (let i = 0; i < 5; i++) {
+        const day = new Date(initialDate)
+        day.setDate(initialDate.getDate() + i)
+        weekDates.push(day)
+    }
+    return weekDates
+}
+
 interface Props {
     onChangeWeek: (week: Date) => void
 }
@@ -29,9 +41,22 @@ const WeekControl: React.FC<Props> = ({ onChangeWeek }) => {
 
     const [week, setWeek] = useState(findMonday(new Date()));
 
+    const dayMonth = () => {
+        const day = week.getDate()
+        const month = week.getMonth() + 1
+
+        const dayF = day < 10 ? "0" + day : day
+        const monthF = month < 10 ? "0" + month : month
+
+        return dayF + "/" + monthF
+    }
+
     const handleWeek = (shift: number) => {
-        setWeek(shiftDays(week, shift))
-        onChangeWeek(week)
+        setWeek(pastWeek => {
+            var newWeek = shiftDays(pastWeek, shift)
+            onChangeWeek(newWeek)
+            return newWeek
+        })
     }
 
     return (
@@ -39,7 +64,7 @@ const WeekControl: React.FC<Props> = ({ onChangeWeek }) => {
             <i className="arrow left fas fa-arrow-left" onClick={() => handleWeek(-7)}></i>
 
             <div>
-                <h1 id="week-text">Semana {week.getDate()}/{week.getMonth() + 1}</h1>
+                <h1 id="week-text">Semana {dayMonth()}</h1>
             </div>
 
             <i className="arrow right fas fa-arrow-right" onClick={() => handleWeek(7)}></i>
@@ -47,4 +72,5 @@ const WeekControl: React.FC<Props> = ({ onChangeWeek }) => {
     )
 }
 
-export { shiftDays, findMonday, WeekControl }
+export { WeekControl, findMonday, shiftDays, getWeek }
+
